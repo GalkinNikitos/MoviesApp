@@ -21,11 +21,11 @@ public class MiddlewareForActors
     {
         if (httpContext.Request.GetDisplayUrl().Contains("Actor"))
         {
-            _logger.LogInformation(httpContext.Request.Method);
-            _logger.LogInformation(httpContext.Request.Path);
-            _logger.LogInformation(httpContext.Request.Protocol);
-            _logger.LogInformation(httpContext.Request.ContentType);
-            _logger.LogInformation(httpContext.Request.QueryString.Value);
+            _logger.LogInformation($"{httpContext.Request.Method}" +
+                                   $"{httpContext.Request.Path}" +
+                                   $"{httpContext.Request.Protocol}" +
+                                   $"{httpContext.Request.ContentType}" +
+                                   $"{httpContext.Request.QueryString.Value}");
         }
 
         return _next(httpContext);
