@@ -65,6 +65,7 @@ public class ActorsController : Controller
 
     [HttpPost]
     [ValidateAntiForgeryToken]
+    [RequiredAgeOfActor]
     public IActionResult Create([Bind("Name,Surname,DateOfBirth")] InputActorsModel inputModel)
     {
         if (ModelState.IsValid)
@@ -107,6 +108,7 @@ public class ActorsController : Controller
     
     [HttpPost]
     [ValidateAntiForgeryToken]
+    [RequiredAgeOfActor]
     public IActionResult Edit(int id, [Bind("Name,Surname,DateOfBirth")] EditActorViewModel editModel)
     {
         if (ModelState.IsValid)

@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "/OaIhf8J3f05IZa9mQcxzOOYoxqaIEm+1TMCSO1VJ67KxKDlASsMDgjwKMhBbGCLERLdw7QkBALybWYrBvM+Xw==",
+  "dgSpecHash": "dvg0kfgIa04RXiO8OoOEj1zaiiH/KTqVc9GJ/kQeb0/fMFMg/XYQXlZzG/Ae0hOyIZJnt6KAR4K3aDTASA8gkA==",
   "success": true,
-  "projectFilePath": "D:\\MoviesApp\\MoviesApp\\MoviesApp.csproj",
+  "projectFilePath": "C:\\Users\\USER\\Desktop\\projects\\MoviesAppGalkinNMUVP-311\\MoviesApp.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\USER\\.nuget\\packages\\humanizer.core\\2.8.26\\humanizer.core.2.8.26.nupkg.sha512",
     "C:\\Users\\USER\\.nuget\\packages\\microsoft.csharp\\4.5.0\\microsoft.csharp.4.5.0.nupkg.sha512",

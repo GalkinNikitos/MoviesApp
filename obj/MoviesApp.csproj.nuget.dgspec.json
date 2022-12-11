@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\MoviesApp\\MoviesApp\\MoviesApp.csproj": {}
+    "C:\\Users\\USER\\Desktop\\projects\\MoviesAppGalkinNMUVP-311\\MoviesApp.csproj": {}
   },
   "projects": {
-    "D:\\MoviesApp\\MoviesApp\\MoviesApp.csproj": {
+    "C:\\Users\\USER\\Desktop\\projects\\MoviesAppGalkinNMUVP-311\\MoviesApp.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\MoviesApp\\MoviesApp\\MoviesApp.csproj",
+        "projectUniqueName": "C:\\Users\\USER\\Desktop\\projects\\MoviesAppGalkinNMUVP-311\\MoviesApp.csproj",
         "projectName": "MoviesApp",
-        "projectPath": "D:\\MoviesApp\\MoviesApp\\MoviesApp.csproj",
+        "projectPath": "C:\\Users\\USER\\Desktop\\projects\\MoviesAppGalkinNMUVP-311\\MoviesApp.csproj",
         "packagesPath": "C:\\Users\\USER\\.nuget\\packages\\",
-        "outputPath": "D:\\MoviesApp\\MoviesApp\\obj\\",
+        "outputPath": "C:\\Users\\USER\\Desktop\\projects\\MoviesAppGalkinNMUVP-311\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Microsoft\\Xamarin\\NuGet"
