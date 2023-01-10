@@ -2,10 +2,10 @@
 @model IEnumerable<MoviesApp.ViewModels.Actors.ActorViewModel>
 
 @{
-    ViewData["Title"] = "Index Actors";
+    ViewData["Title"] = "Index";
 }
 
-<h1>Index Actors</h1>
+<h1>Index</h1>
 
 <p>
     <a asp-action="Create">Create New</a>
@@ -14,13 +14,13 @@
     <thead>
     <tr>
         <th>
-            <label asp-for="@Model.First().Name"></label>
+            <label asp-for="@Model.First().FirstName"></label>
         </th>
         <th>
-            <label asp-for="@Model.First().Surname"></label>
+            <label asp-for="@Model.First().LastName"></label>
         </th>
         <th>
-            <label asp-for="@Model.First().DateOfBirth"></label>
+            <label asp-for="@Model.First().Birthday"></label>
         </th>
         <th></th>
     </tr>
@@ -29,15 +29,14 @@
     @foreach (var item in Model) {
         <tr>
             <td>
-                @item.Name
+                @item.FirstName
             </td>
             <td>
-                @item.Surname
+                @item.LastName
             </td>
             <td>
-                @item.DateOfBirth.ToString("dd.MM.yyyy")
+                @item.Birthday.ToString("dd.MM.yyyy")
             </td>
-            
             <td>
                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
                 <a asp-action="Details" asp-route-id="@item.Id">Details</a> |

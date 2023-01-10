@@ -1,6 +1,8 @@
-﻿namespace MoviesApp.ViewModels.Actors;
+﻿using MoviesApp.ViewModels.Actors;
 
-public class ActorViewModel: InputActorsModel
+namespace MoviesApp.ViewModels.Actors;
+
+public class ActorViewModel: InputActorViewModel
 {
     public int Id { get; set; }
 }

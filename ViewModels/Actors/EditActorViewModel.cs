@@ -1,6 +1,8 @@
-﻿namespace MoviesApp.ViewModels.Actors;
+﻿using MoviesApp.ViewModels.Actors;
 
-public class EditActorViewModel: InputActorsModel
+namespace MoviesApp.ViewModels.Actors;
+
+public class EditActorViewModel: InputActorViewModel
 {
     
 }

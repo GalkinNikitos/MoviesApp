@@ -1,183 +1,133 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
+using AutoMapper;
+//using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using MoviesApp.Data;
+using MoviesApp.Filters;
 using MoviesApp.Models;
+using MoviesApp.Services;
+using MoviesApp.Services.Dto;
 using MoviesApp.ViewModels.Actors;
 
 namespace MoviesApp.Controllers;
 
 public class ActorsController : Controller
 {
-    private readonly MoviesContext _context;
-    private readonly ILogger<HomeController> _logger;
+     private readonly MoviesContext _context;
+        private readonly ILogger<HomeController> _logger;
+        private readonly IMapper _mapper;
+        private readonly IActorService _service;
 
 
-    public ActorsController(MoviesContext context, ILogger<HomeController> logger)
-    {
-        _context = context;
-        _logger = logger;
-    }
-    
-    [HttpGet]
-    public IActionResult Index()
-    {
-        return View(_context.Actors.Select(a => new ActorViewModel
+        public ActorsController(MoviesContext context, ILogger<HomeController> logger,  IMapper mapper, IActorService service)
         {
-            Id = a.Id,
-            Name = a.Name,
-            Surname = a.Surname,
-            DateOfBirth = a.DateOfBirth    
-        }).ToList());
-    }
-    
-    [HttpGet]
-    public IActionResult Details(int? id)
-    {
-        if (id == null)
-        {
-            return NotFound();
+            _context = context;
+            _logger = logger;
+            _mapper = mapper;
+            _service = service;
         }
 
-        var viewModel = _context.Actors.Where(a => a.Id == id).Select(a => new ActorViewModel
+        // GET: Actor
+        [HttpGet]
+        public IActionResult Index()
         {
-            Id = a.Id,
-            Name = a.Name,
-            Surname = a.Surname,
-            DateOfBirth = a.DateOfBirth
-        }).FirstOrDefault();
-
-            
-        if (viewModel == null)
-        {
-            return NotFound();
+            var actors = _mapper.Map<IEnumerable<ActorDto>, IEnumerable<ActorViewModel>>(_service.GetAllActors());
+            return View(actors);
         }
 
-        return View(viewModel);
-    }
+        // GET: Actor/Details/5
+        [HttpGet]
+        public IActionResult Details(int? id)
+        {
+            if (id == null) return NotFound();
+
+            var viewModel = _mapper.Map<ActorViewModel>(_service.GetActor((int) id));
+
+            if (viewModel == null) return NotFound();
+
+            return View(viewModel);
+        }
         
-    [HttpGet]
-    public IActionResult Create()
-    {
-        return View();
-    }
-
-    [HttpPost]
-    [ValidateAntiForgeryToken]
-    [RequiredAgeOfActor]
-    public IActionResult Create([Bind("Name,Surname,DateOfBirth")] InputActorsModel inputModel)
-    {
-        if (ModelState.IsValid)
+        // GET: Actor/Create
+        [HttpGet]
+        public IActionResult Create()
         {
-            _context.Add(new Actor
-            {
-                Name = inputModel.Name,
-                Surname = inputModel.Surname,
-                DateOfBirth = inputModel.DateOfBirth
-            });
-            _context.SaveChanges();
+            return View();
+        }
 
+        // POST: Movies/Create
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [ActorAge(7, 99)]
+        public IActionResult Create([Bind("Title,ReleaseDate,Genre,Price")] InputActorViewModel inputModel)
+        {
+            if (!ModelState.IsValid) return View(inputModel);
+            _service.AddActor(_mapper.Map<ActorDto>(inputModel));
+            return RedirectToAction(nameof(Index));
+
+        }
+        
+        [HttpGet]
+        // GET: Actor/Edit/5
+        public IActionResult Edit(int? id)
+        {
+            if (id == null) return NotFound();
+
+            var editModel = _mapper.Map<EditActorViewModel>(_service.GetActor((int) id));
+
+            if (editModel == null) return NotFound();
+
+            return View(editModel);
+        }
+
+        // POST: Actor/Edit/5
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [ActorAge(7, 99)]
+        public IActionResult Edit(int id, [Bind("Title,ReleaseDate,Genre,Price")] EditActorViewModel editModel)
+        {
+            if (!ModelState.IsValid) return View(editModel);
+            var movie = _mapper.Map<ActorDto>(editModel);
+            movie.Id = id;
+            var result = _service.UpdateActor(movie);
+            if (result == null) return NotFound();
+            return RedirectToAction(nameof(Index));
+
+        }
+        
+        [HttpGet]
+        // GET: Actor/Delete/5
+        public IActionResult Delete(int? id)
+        {
+            if (id == null) return NotFound();
+
+            var deleteModel = _mapper.Map<DeleteActorViewModel>(_service.GetActor((int) id));
+
+            if (deleteModel == null) return NotFound();
+
+            return View(deleteModel);
+        }
+        
+        // POST: Actor/Delete/5
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public IActionResult DeleteConfirmed(int id)
+        {
+            var movie = _service.DeleteActor(id);
+            if (movie == null) return NotFound();
+            _logger.LogTrace($"Actor with id {movie.Id} has been deleted!");
             return RedirectToAction(nameof(Index));
         }
-        return View(inputModel);
-    }
-        
-    [HttpGet]
-    public IActionResult Edit(int? id)
-    {
-        if (id == null)
-        {
-            return NotFound();
-        }
 
-        var editModel = _context.Actors.Where(a => a.Id == id).Select(a => new EditActorViewModel
+        private bool ActorExists(int id)
         {
-            Name = a.Name,
-            Surname = a.Surname,
-            DateOfBirth = a.DateOfBirth
-        }).FirstOrDefault();
-            
-        if (editModel == null)
-        {
-            return NotFound();
+            return _context.Actors.Any(e => e.Id == id);
         }
-            
-        return View(editModel);
-    }
-    
-    [HttpPost]
-    [ValidateAntiForgeryToken]
-    [RequiredAgeOfActor]
-    public IActionResult Edit(int id, [Bind("Name,Surname,DateOfBirth")] EditActorViewModel editModel)
-    {
-        if (ModelState.IsValid)
-        {
-            try
-            {
-                var actor = new Actor
-                {
-                    Id = id,
-                    Name = editModel.Name,
-                    Surname = editModel.Surname,
-                    DateOfBirth = editModel.DateOfBirth
-                };
-                    
-                _context.Update(actor);
-                _context.SaveChanges();
-            }
-            catch (DbUpdateException)
-            {
-                if (!MovieExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-            return RedirectToAction(nameof(Index));
-        }
-        return View(editModel);
-    }
-        
-    [HttpGet]
-    public IActionResult Delete(int? id)
-    {
-        if (id == null)
-        {
-            return NotFound();
-        }
-
-        var deleteModel = _context.Actors.Where(a => a.Id == id).Select(a => new DeleteActorViewModel
-        {
-            Name = a.Name,
-            Surname = a.Surname,
-            DateOfBirth = a.DateOfBirth
-        }).FirstOrDefault();
-            
-        if (deleteModel == null)
-        {
-            return NotFound();
-        }
-
-        return View(deleteModel);
-    }
-        
-    [HttpPost, ActionName("Delete")]
-    [ValidateAntiForgeryToken]
-    public IActionResult DeleteConfirmed(int id)
-    {
-        var actor = _context.Actors.Find(id);
-        _context.Actors.Remove(actor);
-        _context.SaveChanges();
-        _logger.LogError($"Actor with id {actor.Id} has been deleted!");
-        return RedirectToAction(nameof(Index));
-    }
-
-    private bool MovieExists(int id)
-    {
-        return _context.Movies.Any(e => e.Id == id);
-    }
 }
