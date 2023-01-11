@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MoviesApp.Data;
 using MoviesApp.Models;
@@ -21,7 +22,7 @@ public class ActorService : IActorService
     
     public ActorDto AddActor(ActorDto actorDto)
     {
-        var actor = _context.Add((object) _mapper.Map<Actor>(actorDto)).Entity;
+        var actor = _context.Add(_mapper.Map<Actor>(actorDto)).Entity;
         _context.SaveChanges();
         return _mapper.Map<ActorDto>(actor);
     }
@@ -56,16 +57,16 @@ public class ActorService : IActorService
         }
     }
     
-
-    public ActorDto DeleteActor(int id)
+    public bool DeleteActor(int id)
     {
         var actor = _context.Actors.Find(id);
-        if (actor == null) return null;
+        if (actor == null) 
+            return false;
 
         _context.Actors.Remove(actor);
         _context.SaveChanges();
 
-        return _mapper.Map<ActorDto>(actor);
+        return true;
     }
 
     private bool ActorExists(int id)

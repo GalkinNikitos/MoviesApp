@@ -13,5 +13,5 @@ public interface IActorService
 
     ActorDto UpdateActor(ActorDto actorDto);
     
-    ActorDto DeleteActor(int id);
+    bool DeleteActor(int id);
 }

@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using MoviesApp.Models;
@@ -12,8 +13,8 @@ namespace MoviesApp.Data
         {
             Console.WriteLine("Seeding Database");
             using (var context = new MoviesContext(
-                serviceProvider.GetRequiredService<
-                    DbContextOptions<MoviesContext>>()))
+                       serviceProvider.GetRequiredService<
+                           DbContextOptions<MoviesContext>>()))
             {
                 //movies.
                 if (!context.Movies.Any())
@@ -26,8 +27,6 @@ namespace MoviesApp.Data
                             Genre = "Romantic Comedy",
                             Price = 7.99M
                         },
-
-
                         new Movie
                         {
                             Title = "Ghostbusters ",
@@ -35,7 +34,6 @@ namespace MoviesApp.Data
                             Genre = "Comedy",
                             Price = 8.99M
                         },
-
                         new Movie
                         {
                             Title = "Ghostbusters 2",
@@ -43,7 +41,6 @@ namespace MoviesApp.Data
                             Genre = "Comedy",
                             Price = 9.99M
                         },
-
                         new Movie
                         {
                             Title = "Rio Bravo",
@@ -93,7 +90,33 @@ namespace MoviesApp.Data
                     );
 
                     context.SaveChanges();
-                }               
+                }
+
+                var userManager = serviceProvider.GetService<UserManager<ApplicationUser>>();
+                var roleManager = serviceProvider.GetService<RoleManager<IdentityRole>>();
+
+                if (!roleManager.RoleExistsAsync("Admin").Result)
+                {
+                    roleManager.CreateAsync(new IdentityRole { Name = "Admin" }).Wait();
+                }
+
+                if (userManager.FindByEmailAsync("admin@example.com").Result == null)
+                {
+                    var user = new ApplicationUser
+                    {
+                        UserName = "admin@6911.com",
+                        Email = "admin@admin.com",
+                        FirstName = "Cool",
+                        LastName = "Admin"
+                    };
+
+                    IdentityResult result = userManager.CreateAsync(user, "P@ssw0rd").Result;
+
+                    if (result.Succeeded)
+                    {
+                        userManager.AddToRoleAsync(user, "Admin").Wait();
+                    }
+                }
             }
         }
     }

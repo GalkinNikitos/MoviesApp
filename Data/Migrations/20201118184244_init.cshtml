@@ -11,12 +11,12 @@ namespace MoviesApp.Data.Migrations
                 name: "Movies",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
+                    Id = table.Column<>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Title = table.Column<string>(nullable: true),
-                    ReleaseDate = table.Column<DateTime>(nullable: false),
-                    Genre = table.Column<string>(nullable: true),
-                    Price = table.Column<decimal>(nullable: false)
+                    Title = table.Column<>(nullable: true),
+                    ReleaseDate = table.Column<>(nullable: false),
+                    Genre = table.Column<>(nullable: true),
+                    Price = table.Column<>(nullable: false)
                 },
                 constraints: table =>
                 {
