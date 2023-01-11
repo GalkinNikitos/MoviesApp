@@ -122,7 +122,7 @@ public class ActorsController : Controller
         {
             var movie = _service.DeleteActor(id);
             if (movie == null) return NotFound();
-            _logger.LogTrace($"Actor with id {movie.Id} has been deleted!");
+            _logger.LogTrace($"Actor with id {id} has been deleted!");
             return RedirectToAction(nameof(Index));
         }
 
